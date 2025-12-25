@@ -17,7 +17,7 @@ NC='\033[0m' # No Color
 
 # Variables
 LOG_FILE="/var/log/owncloud-prerequisites.log"
-PHP_VERSION="8.0"
+PHP_VERSION="7.4"
 
 #########################################################################
 # Fonctions utilitaires
