@@ -95,8 +95,22 @@ configure_installation() {
         echo "Le mot de passe ne peut pas être vide"
     done
     
-    # Générer mot de passe utilisateur DB
-    DB_USER_PASS=$(generate_password)
+    # Mot de passe utilisateur ownCloud pour la base de données
+    while true; do
+        read -sp "Mot de passe pour l'utilisateur 'owncloud' de la base de données: " DB_USER_PASS
+        echo ""
+        if [ ! -z "$DB_USER_PASS" ]; then
+            read -sp "Confirmer le mot de passe: " DB_USER_PASS_CONFIRM
+            echo ""
+            if [ "$DB_USER_PASS" == "$DB_USER_PASS_CONFIRM" ]; then
+                break
+            else
+                echo "Les mots de passe ne correspondent pas. Veuillez réessayer."
+            fi
+        else
+            echo "Le mot de passe ne peut pas être vide"
+        fi
+    done
     
     # SSL/TLS
     read -p "Configurer SSL/TLS avec Let's Encrypt? (o/N): " -n 1 -r SETUP_SSL
