@@ -17,7 +17,7 @@ NC='\033[0m' # No Color
 
 # Variables
 LOG_FILE="/var/log/owncloud-prerequisites.log"
-PHP_VERSION="8.0.0"
+PHP_VERSION="8.0"
 
 #########################################################################
 # Fonctions utilitaires
@@ -103,6 +103,17 @@ install_mariadb() {
 }
 
 install_php() {
+    log "Suppression de toutes les versions PHP existantes..."
+    
+    # Arrêter Apache si en cours d'exécution
+    systemctl stop apache2 >> "$LOG_FILE" 2>&1 || true
+    
+    # Purger toutes les versions de PHP
+    apt-get purge -y 'php*' >> "$LOG_FILE" 2>&1 || true
+    apt-get autoremove -y >> "$LOG_FILE" 2>&1
+    apt-get autoclean >> "$LOG_FILE" 2>&1
+    
+    log "Toutes les versions PHP ont été supprimées"
     log "Installation de PHP ${PHP_VERSION}..."
     
     # Ajouter le repository PHP si nécessaire
@@ -132,6 +143,9 @@ install_php() {
         php${PHP_VERSION}-gmp \
         libapache2-mod-php${PHP_VERSION} \
         >> "$LOG_FILE" 2>&1
+    
+    # Redémarrer Apache
+    systemctl start apache2 >> "$LOG_FILE" 2>&1
     
     log "PHP ${PHP_VERSION} et extensions installés"
 }
