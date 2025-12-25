@@ -144,6 +144,8 @@ create_database() {
 CREATE DATABASE IF NOT EXISTS ${DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_USER_PASS}';
 GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';
+GRANT CREATE USER ON *.* TO '${DB_USER}'@'localhost';
+GRANT SELECT ON mysql.user TO '${DB_USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOF
     
