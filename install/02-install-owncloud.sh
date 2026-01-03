@@ -4,7 +4,7 @@
 # Description: Installation et configuration complète d'ownCloud
 # Auteur: Scripts ownCloud
 # Version: 1.0.0
-# Date: Décembre 2025
+# Date: Mai 2024
 #########################################################################
 
 set -e
@@ -144,8 +144,6 @@ create_database() {
 CREATE DATABASE IF NOT EXISTS ${DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_USER_PASS}';
 GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';
-GRANT CREATE USER ON *.* TO '${DB_USER}'@'localhost';
-GRANT SELECT ON mysql.user TO '${DB_USER}'@'localhost';
 FLUSH PRIVILEGES;
 EOF
     
@@ -366,6 +364,10 @@ IMPORTANT:
   - Identifiants DB sauvegardés dans: /root/.owncloud-db-credentials
   - Complétez l'installation via l'interface web: http${SETUP_SSL:+s}://${DOMAIN_NAME}
   - Utilisez le répertoire de données: ${DATA_DIR}
+
+NOTE DE SÉCURITÉ:
+  - Le fichier /root/.owncloud-db-credentials contient le mot de passe de la base de données en clair.
+  - Supprimez ce fichier après avoir terminé la configuration pour améliorer la sécurité.
   
 Prochaines étapes:
   1. Accéder à l'interface web

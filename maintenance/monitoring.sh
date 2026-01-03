@@ -4,7 +4,7 @@
 # Description: Surveillance système et état d'ownCloud
 # Auteur: Scripts ownCloud
 # Version: 1.0.0
-# Date: Décembre 2025
+# Date: Mai 2024
 #########################################################################
 
 # Couleurs

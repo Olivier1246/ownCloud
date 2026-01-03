@@ -60,6 +60,10 @@ Consultez le dossier `documentation/` pour des guides détaillés :
 - Activer l'authentification à deux facteurs
 - Consulter [security.md](documentation/security.md)
 
+> **Note de sécurité importante :**
+> ownCloud 10.16.0 requiert PHP 7.4, qui est en fin de vie (End-of-Life) et ne reçoit plus de mises à jour de sécurité.
+> Utilisez cette version avec prudence et envisagez des mesures de sécurité supplémentaires.
+
 ## 🛠️ Maintenance
 
 ### Sauvegarde
@@ -126,4 +130,4 @@ Scripts créés pour faciliter le déploiement d'ownCloud Server.
 
 - **Version des scripts** : 1.0.0
 - **ownCloud Server** : 10.16.0
-- **Dernière mise à jour** : Décembre 2025
+- **Dernière mise à jour** : Mai 2024

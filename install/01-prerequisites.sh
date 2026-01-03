@@ -4,7 +4,7 @@
 # Description: Installe Apache, MariaDB, PHP et toutes les dépendances
 # Auteur: Scripts ownCloud
 # Version: 1.0.0
-# Date: Décembre 2025
+# Date: Mai 2024
 #########################################################################
 
 set -e  # Arrêter en cas d'erreur
@@ -103,18 +103,12 @@ install_mariadb() {
 }
 
 install_php() {
-    log "Suppression de toutes les versions PHP existantes..."
+    log "Installation de PHP ${PHP_VERSION}..."
+    warning "PHP 7.4 est en fin de vie (EOL) et ne reçoit plus de mises à jour de sécurité."
+    warning "Il est requis par ownCloud 10.16.0 mais doit être utilisé avec prudence."
     
     # Arrêter Apache si en cours d'exécution
     systemctl stop apache2 >> "$LOG_FILE" 2>&1 || true
-    
-    # Purger toutes les versions de PHP
-    apt-get purge -y 'php*' >> "$LOG_FILE" 2>&1 || true
-    apt-get autoremove -y >> "$LOG_FILE" 2>&1
-    apt-get autoclean >> "$LOG_FILE" 2>&1
-    
-    log "Toutes les versions PHP ont été supprimées"
-    log "Installation de PHP ${PHP_VERSION}..."
     
     # Ajouter le repository PHP si nécessaire
     apt-get install -y software-properties-common >> "$LOG_FILE" 2>&1
