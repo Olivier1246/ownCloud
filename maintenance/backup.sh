@@ -4,7 +4,7 @@
 # Description: Sauvegarde complète des fichiers et de la base de données
 # Auteur: Scripts ownCloud
 # Version: 1.0.0
-# Date: Décembre 2025
+# Date: Mai 2024
 #########################################################################
 
 set -e
@@ -92,10 +92,9 @@ backup_database() {
     
     local db_backup="${BACKUP_DIR}/database_${TIMESTAMP}.sql"
     
-    # Demander le mot de passe si non défini
+    # Vérifier si le mot de passe est défini
     if [ -z "$DB_PASS" ]; then
-        read -sp "Mot de passe MySQL pour ${DB_USER}: " DB_PASS
-        echo ""
+        error "Mot de passe de la base de données non trouvé. Assurez-vous que /root/.owncloud-db-credentials est correctement configuré."
     fi
     
     # Dump de la base de données
@@ -150,25 +149,6 @@ backup_data() {
     fi
 }
 
-backup_installation() {
-    log "Sauvegarde de l'installation ownCloud..."
-    
-    local install_backup="${BACKUP_DIR}/installation_${TIMESTAMP}.tar.gz"
-    
-    tar -czf "${install_backup}" \
-        --exclude="${OWNCLOUD_DIR}/data" \
-        --exclude="${OWNCLOUD_DIR}/config" \
-        -C "$(dirname ${OWNCLOUD_DIR})" "$(basename ${OWNCLOUD_DIR})" \
-        >> "$LOG_FILE" 2>&1
-    
-    if [ $? -eq 0 ]; then
-        log "Installation sauvegardée: ${install_backup}"
-        echo "${install_backup}"
-    else
-        warning "Échec de la sauvegarde de l'installation"
-        echo ""
-    fi
-}
 
 #########################################################################
 # Gestion des anciennes sauvegardes
@@ -189,7 +169,6 @@ cleanup_old_backups() {
         ls -1t ${BACKUP_DIR}/database_*.sql.gz | tail -n ${to_delete} | xargs rm -f
         ls -1t ${BACKUP_DIR}/config_*.tar.gz | tail -n ${to_delete} | xargs rm -f 2>/dev/null || true
         ls -1t ${BACKUP_DIR}/data_*.tar.gz | tail -n ${to_delete} | xargs rm -f 2>/dev/null || true
-        ls -1t ${BACKUP_DIR}/installation_*.tar.gz | tail -n ${to_delete} | xargs rm -f 2>/dev/null || true
         
         log "Anciennes sauvegardes supprimées"
     else
@@ -340,7 +319,6 @@ main() {
     backup_database
     backup_config
     backup_data
-    backup_installation
     
     # Désactiver le mode maintenance
     enable_maintenance_mode off
